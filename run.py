@@ -6,6 +6,7 @@ from forms import LoginForm
 app = Flask(__name__)
 app.config.from_object('config')
 
+
 @app.route('/')
 def home():
     return render_template('user.html')

@@ -11,11 +11,11 @@ class User(db.Model):
     DOB = db.column(db.date(50)),
     Location = db.column(db.string(50))
 
-    def __init__(self,FirstName, LastName, DOB, Location):
-        self.FirstName = FirstName
-        self.LastName = LastName
-        self.DOB = DOB
-        self.Location = Location
+    def __init__(self, first_name, last_name, dob, location):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.dob = dob
+        self.location = location
 
 
 
