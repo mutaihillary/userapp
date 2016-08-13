@@ -22,5 +22,17 @@ def login():
                            providers=app.config['OPENID_PROVIDERS'])
 
 
+@app.route('/')
+def user():
+    return render_template('user.html')
+
+
+@app.route('/display',methods=['POST', 'GET'])
+def display():
+    if request.method== 'POST':
+        display=request.form
+    return render_template("display.html", display=display)
+
+
 if __name__ == "__main__":
     app.run(debug=True)
