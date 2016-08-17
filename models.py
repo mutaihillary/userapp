@@ -6,16 +6,21 @@ db = SQLAlchemy(app)
 
 # create a user model
 class User(db.Model):
-    FirstName = db.Column(db.String(50), unique=True)
-    LastName = db.column(db.string(50)),
-    DOB = db.column(db.date(50)),
-    Location = db.column(db.string(50))
+    __tablename__ = "users"
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String)
+    last_name = db.column(db.String)
+    dob = db.column(db.DateTime)
+    location = db.column(db.String)
 
     def __init__(self, first_name, last_name, dob, location):
         self.first_name = first_name
         self.last_name = last_name
         self.dob = dob
         self.location = location
+
+    def __repr__(self, first_name, last_name, dob, location):
+        return self.first_name, self.last_name, self.dob, self.location
 
 
 

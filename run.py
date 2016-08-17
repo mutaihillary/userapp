@@ -1,11 +1,14 @@
 #!flask/bin/python
-from flask import Flask, render_template, request, login_user
+from flask import Flask, render_template, request, redirect, url_for
+from flask_bcrypt import Bcrypt
+from flask_login import login_user
 from forms import LoginForm
-
+import models
 
 app = Flask(__name__)
 app.config.from_object('config')
 app.secret_key = 'hdjshjdbdshbfd.jndsjdbjbdj'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 
 @app.route('/')
@@ -17,15 +20,14 @@ def home():
 def login():
     """For GET requests, display the login form. For POSTS, login the current user
         by processing the form."""
-    print user.db
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.get(form.email.data)
+        user = models.User.query.get(form.email.data)
         if user:
-            if bcrypt.check_password_hash(user.password, form.password.data):
+            if Bcrypt.check_password_hash(user.password, form.password.data):
                 user.authenticated = True
-                db.session.add(user)
-                db.session.commit()
+                models.db.session.add(user)
+                models.db.session.commit()
                 login_user(user, remember=True)
                 return redirect(url_for("bull.reports"))
     return render_template("login.html", form=form)
