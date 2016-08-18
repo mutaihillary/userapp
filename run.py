@@ -3,7 +3,6 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_bcrypt import Bcrypt
 from flask_login import login_user
 from forms import LoginForm
-from  forms import Logout
 import models
 
 app = Flask(__name__)
@@ -14,7 +13,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 @app.route('/')
 def home():
-    return render_template('user.html')
+    return render_template('login.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -33,18 +32,12 @@ def login():
             return redirect(url_for("index"))
     return render_template("user.html", form=form)
 
-
-"""@bull.route("/logout", methods=["GET"])
-@login_required
+"""""
+@app.route('/logout')
 def logout():
-    Logout the current user.
-    models.User = current_user
-    models.user.authenticated = False
-    models.db.session.add(user)
-    models.db.session.commit()
     logout_user()
-    return render_template("logout.html")
-"""
+    return redirect(url_for('index'))
+"""""
 
 
 @app.route('/display', methods=['POST', 'GET'])
