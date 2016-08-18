@@ -1,10 +1,12 @@
 #!flask/bin/python
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for,flash
 from flask_bcrypt import Bcrypt
 from flask_login import login_user
-from forms import LoginForm
+from forms import LoginForm, RegistrationForm
 import sqlite3 as sql
 import models
+from __init__ import db
+
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -30,8 +32,26 @@ def login():
                 models.db.session.add(user)
                 models.db.session.commit()
                 login_user(user, remember=True)
-            return redirect(url_for("index"))
-    return render_template("user.html", form=form)
+            return redirect(url_for("home"))
+    return render_template("login.html", form=form)
+
+con = sql.connect('userapp.db')
+# register a user
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegistrationForm()
+    print(form)
+    if form.validate_on_submit():
+        user = models.User(email=form.email.data,
+                    username=form.username.data,
+                    password=form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('index'))
+    return render_template('user.html', form=form)
+
 
 """""
 @app.route('/logout')
@@ -39,6 +59,8 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 """""
+
+
 
 
 @app.route('/user')
@@ -49,7 +71,7 @@ def user():
     cur = con.cursor()
     cur.execute("select * from user")
 
-    rows = cur.fetchall();
+    rows = cur.fetchall()
     return render_template("user.html", rows=rows)
 
 
