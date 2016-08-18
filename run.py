@@ -61,8 +61,6 @@ def logout():
 """""
 
 
-
-
 @app.route('/user')
 def user():
     con = sql.connect("userapp.db")
