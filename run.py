@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_bcrypt import Bcrypt
 from flask_login import login_user
 from forms import LoginForm
+import sqlite3 as sql
 import models
 
 app = Flask(__name__)
@@ -38,6 +39,18 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 """""
+
+
+@app.route('/user')
+def user():
+    con = sql.connect("userapp.db")
+    con.row_factory = sql.Row
+
+    cur = con.cursor()
+    cur.execute("select * from user")
+
+    rows = cur.fetchall();
+    return render_template("user.html", rows=rows)
 
 
 @app.route('/display', methods=['POST', 'GET'])
